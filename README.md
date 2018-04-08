@@ -30,7 +30,8 @@ to keep sending delay minimal.
 
 **Input**
 
-We prepared some sample data in a CSV file that simulates an incoming event stream. Every line represents a new tour of a friend of which we want to inform a user.
+We prepared some sample data in a CSV file that simulates an incoming event stream. Every line represents a
+ new tour of a friend of which we want to inform a user.
 
 
 timestamp            user_id       friend_id     friend_name
