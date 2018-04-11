@@ -34,25 +34,21 @@ We prepared some sample data in a CSV file that simulates an incoming event stre
  new tour of a friend of which we want to inform a user.
 
 
-timestamp            user_id       friend_id     friend_name
-2018-02-14 11:50:02, EB96305EADU2, 84BE9DC3BFLL, Matthew
-
-
-2018-02-14 11:50:02, 0B4E1F74A818, 84BE9DC3BFLL, Matthew
-
-
-2018-02-14 11:50:05, 0B4E1F74A818, E670587FFC18, Jonathan
+| timestamp | user_id | friend_id | friend_name |
+|-----------|---------|-----------|-------------|
+| 2018-02-14 11:50:02 | EB96305EADU2 | 84BE9DC3BFLL | Matthew  |
+| 2018-02-14 11:50:02 | 0B4E1F74A818 | 84BE9DC3BFLL | Matthew  |
+| 2018-02-14 11:50:05 | 0B4E1F74A818 | E670587FFC18 | Jonathan |
 
 
 **Output**
 
 The output should be also a CSV file which contains all (bundled) notifications
 
-notification_sent    timestamp_first_tour  tours  receiver_id   message
-
-2018-02-14 11:50:02, 2018-02-14 11:50:02,  1,     EB96305EADU2, Matthew went on a tour
-
-2018-02-14 11:57:21, 2018-02-14 11:50:02,  2,     0B4E1F74A818, Matthew and 1 other went on a tour
+| notification_sent | timestamp_first_tour | tours | receiver_id | message |
+|-------------------|----------------------|-------|-------------|---------|
+| 2018-02-14 11:50:02 | 2018-02-14 11:50:02 | 1 | EB96305EADU2 | Matthew went on a tour |
+| 2018-02-14 11:57:21 | 2018-02-14 11:50:02 | 2 | 0B4E1F74A818 | Matthew and 1 other went on a tour |
 
 **Requirements**
 
