@@ -7,19 +7,15 @@ from dateutil import parser
 
 base_dir = dirname(dirname(abspath(__file__)))
 
-# The push notifications output table
-df_output = pd.DataFrame(columns=("notification_sent", "timestamp_first_tour", "tours", "receiver_id", "message"))
-
 # All the users in the system, ID => user(obj)
 Users = dict()
 # All the names of the users, ID => Name
 users_names = dict()
-
+rows = list()
 class user:
     '''
     This class represents the users in the context of getting push notifications.
     '''
-
     '''
     A new user just created
     '''
@@ -48,17 +44,20 @@ class user:
     to send the push notification to the user and/or save/log it.
     '''
     def fire(self, time):
+        global rows
         message=""
         if len(self.friends) == 1:
             message += "%s went on a tour." %users_names[self.friends[0]]
         elif len(self.friends) > 1:
             message += "%s and %d other went on a tour." % (users_names[self.friends[0]], self.number_of_notifications - 1)
 
-        df_output.loc[len(df_output)] = [time,
-                                         self.first_notification_time,
-                                         self.number_of_notifications,
-                                         self.id,
-                                         message]
+        rows.append([time,
+                     self.first_notification_time,
+                     self.number_of_notifications,
+                     self.id,
+                     message])
+
+        print(time, self.first_notification_time, self.number_of_notifications, self.id, message)
 
         self.received_push_notifications+=1
         self.friends.clear()
@@ -86,11 +85,18 @@ class user:
         #the same day, and difference no more than 4 hours, and not the last notification in the day
         if number_of_minutes <= 4*60 and self.received_push_notifications < 4 and time_difference.days==0:
             self.new_notification(time_stamp, friend_id)
-        elif self.received_push_notifications == 4 and time_difference.days==0:
+        elif self.received_push_notifications == 4:
             self.new_notification(time_stamp, friend_id)
         # we are in the first 4 sections, and difference more than 4 hours
         else:
-            self.fire(self.first_notification_time + datetime.timedelta(hours=4))
+            date1 = time_stamp
+            date1 = date1.replace(hour=23)
+            date1 = date1.replace(minute=59)
+            date1 = date1.replace(second=59)
+
+            date2 = self.first_notification_time + datetime.timedelta(hours=4)
+
+            self.fire(min(date1, date2))
             self.new_notification(time_stamp, friend_id)
 
 '''
@@ -103,6 +109,7 @@ def get_directory():
     root.filename = filedialog.askopenfilename(initialdir=base_dir, title="Select file",
                                                filetypes=(("csv files", "*.csv"), ("all files", "*.*")))
     return root.filename
+
 '''
 We started a new day or not
 '''
@@ -112,30 +119,47 @@ def new_day(day1, day2):
     # In this case we have to fire everything that we have from before.
     if days_difference.days:
         for _user in Users.values():
-            day1 = day1.replace(hour=23)
-            day1 = day1.replace(minute=59)
-            day1 = day1.replace(second=59)
-            _user.fire(day1)
+            day1_temp = day1
+            if _user.received_push_notifications == 4:
+                day1_temp = day1_temp.replace(hour=23)
+                day1_temp = day1_temp.replace(minute=59)
+                day1_temp = day1_temp.replace(second=59)
+            else:
+                day_temp = day1_temp
+                day_temp = day_temp.replace(hour=23)
+                day_temp = day_temp.replace(minute=59)
+                day_temp = day_temp.replace(second=59)
+                day1_temp = _user.first_notification_time + datetime.timedelta(hours=4)
+                day1_temp = min(day_temp, day1_temp)
+
+            _user.fire(day1_temp)
 
 '''
 This is the last day in the sheet.
 '''
 def end_days(day):
-
+    # this should be a new day actually.
+    # In this case we have to fire everything that we have from before.
     for _user in Users.values():
-        if _user.received_push_notifications==4:
-            day = day.replace(hour=23)
-            day = day.replace(minute=59)
-            day = day.replace(second=59)
+        day_temp = day
+        if _user.received_push_notifications == 4:
+            day_temp = day_temp.replace(hour=23)
+            day_temp = day_temp.replace(minute=59)
+            day_temp = day_temp.replace(second=59)
         else:
-            day = _user.first_notification_time + datetime.timedelta(hours=4)
+            day_temp2 = day_temp
+            day_temp2 = day_temp2.replace(hour=23)
+            day_temp2 = day_temp2.replace(minute=59)
+            day_temp2 = day_temp2.replace(second=59)
+            day_temp = _user.first_notification_time + datetime.timedelta(hours=4)
+            day_temp = min(day_temp, day_temp2)
 
-        _user.fire(day)
+        _user.fire(day_temp)
 
 def main():
 
     # The data sample
-    csv_file = base_dir + '/Komoot/Test_Data/notifications - sample - one day.csv'
+    csv_file = base_dir + '/Test_Data/notifications.csv'
     # The selected data sample
     directory = get_directory()
     # If the user didn't select anything, use the default csv file
@@ -167,7 +191,9 @@ def main():
         if i == len(df) - 1:
             end_days(time_stamp)
 
+    # The push notifications output table
+    df_output = pd.DataFrame(rows, columns=("notification_sent", "timestamp_first_tour", "tours", "receiver_id", "message"))
+    df_output.to_csv(base_dir + "/Results/push_notifications.csv", encoding='utf-8', index=False)
 
-    print (df_output)
 if __name__ == '__main__':
     main()
