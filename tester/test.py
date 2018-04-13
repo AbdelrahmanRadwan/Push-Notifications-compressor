@@ -10,7 +10,10 @@ from tkinter import *
 from dateutil import parser
 
 base_dir = dirname(dirname(abspath(__file__)))
+# Mapping betwen the Day => User => their push notifications
 analytics = dict()
+# The stats about each user
+rows = list()
 '''
 Get the directory of the testing data
 '''
@@ -25,10 +28,12 @@ def get_directory():
 Take the analytics dictionary and provide csv file to represent the results well
 '''
 def analytics_provider():
-    rows = list()
+    global rows
     for date in analytics:
         for user in analytics[date]:
-            row = [date, user]
+            row = list()
+            row.append(date)
+            row.append(user)
             for i in range(len(analytics[date][user])):
                 user_day = analytics[date][user][i]
                 row.append(user_day[0])
@@ -92,9 +97,13 @@ def main():
             analytics[date] = dict()
         if user_id not in analytics[date]:
             analytics[date][user_id] = list()
-        x = notification_sent - timestamp_first_tour
-        print(i, x)
-        analytics[date][user_id].append((notification_sent, notification_sent - timestamp_first_tour,tours))
+
+        max_delay = notification_sent - timestamp_first_tour
+
+        print(i, max_delay)
+
+        analytics[date][user_id].append((notification_sent, max_delay,tours))
+
     analytics_provider()
 
 if __name__ == '__main__':
