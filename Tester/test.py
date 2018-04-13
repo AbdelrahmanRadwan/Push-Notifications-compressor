@@ -98,7 +98,7 @@ def main():
         if x.days >= 1:
             print(i, date, user_id, analytics[date][user_id][1].days)
             break
-    #analytics_provider()
+    analytics_provider()
 
 if __name__ == '__main__':
     main()
