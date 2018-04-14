@@ -224,7 +224,7 @@ time, the maximum delay that this user experienced in this day for each notifica
 - notification1_number_of_tours: number of tours included in the above mentioned push notification. and the same with all the notifications from 2 to 5 (we agreed that the user gets five notifications maximum per day).
 
 
-## How the system is expected to be used as a product:
+## 5. How the system is expected to be used as a product:
 
 
 In real life, you would have clock class, which is a simulator for the time now, and you would
@@ -234,7 +234,7 @@ to say if you have to fire this notification stack for this user at this moment 
 
 Maybe we can parallize it too.
 
-## 5. Results
+## 6. Results
 
 ### 1. Unit test
 
@@ -244,7 +244,7 @@ your own analytics/evaluations online easily), we can see that:
 - Average number of notifications per day for each user is 2.
 - Average delay in notifications is 3 hours.
 
-## 6. Future work and how can we enhance the algorithm:
+## 7. Future work and how can we enhance the algorithm:
 
 
 Enhancing the algorithm can be done by adapting the ranges more to be user specified, I mean
@@ -252,7 +252,7 @@ let’s assume that the user X used to use the app in the morning, and he/she us
 it in the evening, so it will be more logical to move the push notifications range to evening, and
 don’t send in the morning at all based on the fact that the user use the app a lot in the morning.
 
-## 7. My experience with komoot challenge:
+## 8. My experience with komoot challenge:
 
 
 - I like this kind of problems, because they are real life and so interesting, challenging and
@@ -273,6 +273,3 @@ that the results are wrong, because of some logical bugs.
 you how do you usually test such features, all the apps that I worked on so far include
 direct request/response, but this is the first time-dependent task I work on it, and it’s
 really interesting.
-
-
-
