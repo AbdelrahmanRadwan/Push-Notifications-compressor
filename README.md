@@ -3,7 +3,7 @@
 ## 1. Problem Definition
 
 
-Some mobile apps like komoot provide the user with push notifications of their friends’ updates
+Some mobile apps like Komoot & Quora provide the user with push notifications of their friends’ updates
 like status posted ... etc.
 
 Although push notifications are useful, sending to many notifications can be annoying.
