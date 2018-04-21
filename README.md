@@ -252,7 +252,7 @@ let’s assume that the user X used to use the app in the morning, and he/she us
 it in the evening, so it will be more logical to move the push notifications range to evening, and
 don’t send in the morning at all based on the fact that the user use the app a lot in the morning.
 
-## 8. My experience with komoot challenge:
+## 8. My experience with the challenge:
 
 
 - I like this kind of problems, because they are real life and so interesting, challenging and
